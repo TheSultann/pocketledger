@@ -1,8 +1,11 @@
+import csv
+import io
 import os
 from decimal import Decimal
 from typing import List, Dict, Any, Optional
 from fastapi import FastAPI, Header, HTTPException, Depends
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import Response
 from pydantic import BaseModel, Field
 
 import database
@@ -85,3 +88,18 @@ def get_balance():
 @app.get("/breakdown", response_model=List[BreakdownItem], dependencies=[Depends(verify_token)])
 def get_breakdown():
     return database.get_spending_breakdown()
+
+@app.get("/transactions/export", dependencies=[Depends(verify_token)])
+def export_transactions_csv():
+    """Export all transactions as a CSV file download."""
+    transactions = database.list_transactions()
+    output = io.StringIO()
+    writer = csv.writer(output)
+    writer.writerow(["id", "date", "description", "category", "amount"])
+    for tx in transactions:
+        writer.writerow([tx["id"], tx["date"], tx["description"], tx["category"], tx["amount"]])
+    return Response(
+        content=output.getvalue(),
+        media_type="text/csv",
+        headers={"Content-Disposition": "attachment; filename=transactions.csv"},
+    )
