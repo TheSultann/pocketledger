@@ -1,2 +1,4 @@
 2026-10-14T16:26:00Z [agent] Initialized PocketLedger repository structure with backend and frontend
 2026-10-14T16:26:15Z [agent] Configured SQLite database with Decimal conversion support and bearer auth
+[2026-10-14T16:38:45.2174754+02:00] [agent] Added GET /transactions/export CSV endpoint in backend/main.py, closes #1
+2026-10-14T16:41:00Z [agent] Implemented GET /transactions/export CSV endpoint and unit test (resolves #1)
