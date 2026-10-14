@@ -1,9 +1,11 @@
 import csv
 import io
 import os
+import io
+import csv
 from decimal import Decimal
 from typing import List, Dict, Any, Optional
-from fastapi import FastAPI, Header, HTTPException, Depends
+from fastapi import FastAPI, Header, HTTPException, Depends, Response
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import Response
 from pydantic import BaseModel, Field
@@ -88,6 +90,7 @@ def get_balance():
 @app.get("/breakdown", response_model=List[BreakdownItem], dependencies=[Depends(verify_token)])
 def get_breakdown():
     return database.get_spending_breakdown()
+
 
 @app.get("/transactions/export", dependencies=[Depends(verify_token)])
 def export_transactions_csv():

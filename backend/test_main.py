@@ -66,3 +66,14 @@ def test_auth_protection_endpoints():
     # Valid auth
     res_auth = client.get("/transactions", headers={"Authorization": "Bearer secret-token-test"})
     assert res_auth.status_code == 200
+
+def test_export_csv_endpoint():
+    os.environ["POCKETLEDGER_TOKEN"] = "secret-token-test"
+    database.add_transaction(Decimal("150.00"), "Salary", "Income", "2026-10-14")
+    client = TestClient(app)
+    res = client.get("/transactions/export", headers={"Authorization": "Bearer secret-token-test"})
+    assert res.status_code == 200
+    assert "text/csv" in res.headers["content-type"]
+    assert "id,date,description,category,amount" in res.text
+    assert "Salary" in res.text
+
