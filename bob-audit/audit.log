@@ -1,0 +1,2 @@
+2026-10-14T16:26:00Z [agent] Initialized PocketLedger repository structure with backend and frontend
+2026-10-14T16:26:15Z [agent] Configured SQLite database with Decimal conversion support and bearer auth
